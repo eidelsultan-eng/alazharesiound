@@ -208,6 +208,52 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProductsByCategory(products);
     }
 
+    const galleryContainer = document.querySelector('#dynamic-gallery');
+    const galleryItems = [
+        "WhatsApp Image 2026-01-09 at 2.05.09 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.09 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.10 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.10 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.11 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.11 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.13 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.13 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.16 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.16 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.20 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.20 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.21 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.21 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.23 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.23 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.26 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.26 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.28 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.28 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.30 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.30 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.32 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.32 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.33 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.33 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.33 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.34 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.34 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.34 AM (3).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.34 AM (4).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.34 AM.jpeg"
+    ];
+
+    if (galleryContainer) {
+        galleryContainer.innerHTML = galleryItems.map(img => `
+            <div class="product-card gallery-item" data-aos="zoom-in" style="border: none; background: transparent; box-shadow: none; height: auto;">
+                <div class="product-img" style="height: 350px; border-radius: 15px; background: #0a0a0b;">
+                    <img src="${img}" alt="" style="object-fit: contain; width: 100%; height: 100%; opacity: 1;">
+                </div>
+            </div>
+        `).join('');
+    }
+
     function renderProductsByCategory(items) {
         const categories = {
             'mixers': 'الميكسرات والباور',
@@ -230,20 +276,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="products-grid">
                             ${categoryItems.map(product => `
                                 <div class="product-card">
-                                    <div class="product-img">
-                                        ${product.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                                        <img src="${product.image}" alt="${product.name}">
+                                    <div class="product-img" style="height: 300px;">
+                                        <img src="${product.image}" alt="">
                                         <div class="product-overlay">
-                                            <button class="add-to-cart" data-id="${product.id}">طلب المنتج</button>
+                                            <div style="text-align: center; padding: 20px;">
+                                                <button class="add-to-cart" data-id="${product.id}" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 700;">طلب المنتج</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <h3>${product.name}</h3>
-                                        <div class="stats">
-                                            <span class="rating"><i class="fas fa-star"></i> 4.9</span>
-                                            <span class="sold">متوفر الآن</span>
-                                        </div>
-                                    </div>
+                                     </div>
                                 </div>
                             `).join('')}
                         </div>
@@ -370,11 +410,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Mobile Menu Mockup
+    // 7. Mobile Menu
     const menuToggle = document.querySelector('.menu-toggle');
-    if (menuToggle) {
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', () => {
-            alert('القائمة الجانبية للجوال ستضاف في التحديث القادم');
+            navLinks.classList.toggle('mobile-active');
+            // Toggle icon
+            const icon = menuToggle.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('mobile-active');
+                const icon = menuToggle.querySelector('i');
+                if (icon) icon.classList.replace('fa-times', 'fa-bars');
+            });
         });
     }
 
