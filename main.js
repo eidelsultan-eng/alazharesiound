@@ -197,7 +197,8 @@ const products = [
 const categoryMap = {
     'mics': 'cat-mics',
     'speakers': 'cat-speakers',
-    'mixers': 'cat-mixers'
+    'mixers': 'cat-mixers',
+    'installations': 'installations'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -208,30 +209,67 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProductsByCategory(products);
     }
 
-    const galleryContainer = document.querySelector('#dynamic-gallery');
+    // Add gallery items to products array
     const galleryItems = [
         "WhatsApp Image 2026-01-09 at 2.05.09 AM (1).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.09 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.09 AM (3).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.09 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.10 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.10 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.10 AM (3).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.10 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.11 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.11 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.11 AM (3).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.11 AM (4).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.11 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.12 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.13 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.13 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.13 AM (3).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.13 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.15 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.16 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.16 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.16 AM (3).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.16 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.19 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.20 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.20 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.20 AM (3).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.20 AM (4).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.20 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.21 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.21 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.21 AM (3).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.21 AM (4).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.21 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.22 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.22 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.22 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.23 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.23 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.23 AM (3).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.23 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.24 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.25 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.26 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.26 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.26 AM (3).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.26 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.27 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.27 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.27 AM (3).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.27 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.28 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.28 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.28 AM (3).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.28 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.29 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.30 AM (1).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.30 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.31 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.32 AM (1).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.32 AM.jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.33 AM (1).jpeg",
@@ -241,24 +279,32 @@ document.addEventListener('DOMContentLoaded', () => {
         "WhatsApp Image 2026-01-09 at 2.05.34 AM (2).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.34 AM (3).jpeg",
         "WhatsApp Image 2026-01-09 at 2.05.34 AM (4).jpeg",
-        "WhatsApp Image 2026-01-09 at 2.05.34 AM.jpeg"
+        "WhatsApp Image 2026-01-09 at 2.05.34 AM.jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.35 AM (1).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.35 AM (2).jpeg",
+        "WhatsApp Image 2026-01-09 at 2.05.35 AM.jpeg"
     ];
 
-    if (galleryContainer) {
-        galleryContainer.innerHTML = galleryItems.map(img => `
-            <div class="product-card gallery-item" data-aos="zoom-in" style="border: none; background: transparent; box-shadow: none; height: auto;">
-                <div class="product-img" style="height: 350px; border-radius: 15px; background: #0a0a0b;">
-                    <img src="${img}" alt="" style="object-fit: contain; width: 100%; height: 100%; opacity: 1;">
-                </div>
-            </div>
-        `).join('');
+    galleryItems.forEach((img, idx) => {
+        products.push({
+            id: 100 + idx,
+            name: "تجهيز صوتي احترافي",
+            category: "installations",
+            image: img,
+            tags: []
+        });
+    });
+
+    if (productsContainer) {
+        renderProductsByCategory(products);
     }
 
     function renderProductsByCategory(items) {
         const categories = {
             'mixers': 'الميكسرات والباور',
             'mics': 'الميكروفونات وأنظمة الصوت',
-            'speakers': 'السماعات والساوند سيستم'
+            'speakers': 'السماعات والساوند سيستم',
+            'installations': 'تجهيزاتنا على أرض الواقع'
         };
 
         let html = '';
@@ -276,11 +322,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="products-grid">
                             ${categoryItems.map(product => `
                                 <div class="product-card">
-                                    <div class="product-img" style="height: 300px;">
+                                    <div class="product-img">
                                         <img src="${product.image}" alt="">
                                         <div class="product-overlay">
                                             <div style="text-align: center; padding: 20px;">
-                                                <button class="add-to-cart" data-id="${product.id}" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 700;">طلب المنتج</button>
+                                                <button class="add-to-cart" data-id="${product.id}" style="background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 700; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">طلب المنتج</button>
                                             </div>
                                         </div>
                                      </div>

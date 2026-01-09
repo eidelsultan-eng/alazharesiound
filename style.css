@@ -447,19 +447,18 @@ ul {
 
 .product-card {
     background: var(--glass);
-    border-radius: 24px;
+    border-radius: 20px;
     overflow: hidden;
     transition: var(--transition);
     border: 1px solid var(--glass-border);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .product-card:hover {
     transform: translateY(-10px);
     border-color: var(--primary);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes fadeUp {
@@ -499,34 +498,25 @@ ul {
 
 .product-img {
     width: 100%;
-    height: 250px;
+    height: 280px;
+    /* Fixed height for consistency */
     position: relative;
     overflow: hidden;
     background: #0d0d0e;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition);
 }
 
 .product-img img {
     width: 100%;
-    height: 115%;
-    /* Scale up slightly to allow cropping */
+    height: 130%;
+    /* Aggressive scale to hide bottom text */
     object-fit: cover;
-    object-position: top;
-    /* Keep the top part visible */
+    object-position: top center;
+    /* Ensure product top is visible */
     transition: var(--transition);
-    opacity: 1;
-    margin-bottom: -15%;
-    /* Shift to hide the bottom part */
-}
-
-.gallery-item .product-img img {
-    height: 115%;
-    object-fit: cover;
-    object-position: top;
-    margin-bottom: -15%;
+    pointer-events: none;
 }
 
 .product-overlay {
