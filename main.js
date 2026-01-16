@@ -330,6 +330,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                             </div>
                                         </div>
                                      </div>
+                                     <div class="product-info" style="padding: 15px; text-align: center;">
+                                        <h4 style="color: var(--light); margin-bottom: 5px;">${product.name}</h4>
+                                        ${product.specs ? `<p style="color: var(--gray); font-size: 13px; line-height: 1.4;">${product.specs}</p>` : ''}
+                                     </div>
                                 </div>
                             `).join('')}
                         </div>
@@ -511,4 +515,205 @@ document.addEventListener('DOMContentLoaded', () => {
             contactForm.reset();
         });
     }
+
+    // --- Admin Logic with Firebase (Live for everyone) ---
+
+    // 1. Firebase Configuration (Put your keys here)
+    const firebaseConfig = {
+        apiKey: "AIzaSyBnaCO886pZQWvmFS8DKrqC1jqDrdT9_CM",
+        authDomain: "siond-a6c34.firebaseapp.com",
+        projectId: "siond-a6c34",
+        storageBucket: "siond-a6c34.firebasestorage.app",
+        messagingSenderId: "875547108455",
+        appId: "1:875547108455:web:d1b196683dc24b969be0c2",
+        measurementId: "G-CQZJ025G11"
+    };
+
+    // Initialize Firebase if config is provided
+    let db = null;
+    if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+    }
+
+    const adminTrigger = document.getElementById('admin-trigger');
+    const adminModal = document.getElementById('admin-login-modal');
+    const closeModal = adminModal.querySelector('.close-modal');
+    const adminPasswordInput = document.getElementById('admin-password');
+    const loginBtn = document.getElementById('login-btn');
+    const adminSection = document.getElementById('admin');
+    const adminPanelBox = document.getElementById('admin-panel');
+    const addProductForm = document.getElementById('add-product-form');
+    const adminProductsList = document.getElementById('admin-products-list');
+    const CORRECT_PASSWORD = '010asd';
+
+    if (adminTrigger) {
+        adminTrigger.addEventListener('click', () => {
+            adminModal.classList.add('active');
+        });
+    }
+
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            adminModal.classList.remove('active');
+        });
+    }
+
+    let customProducts = [];
+
+    // Function to load products from Firebase (Live sync)
+    function syncProducts() {
+        if (!db) {
+            // Fallback to local storage if Firebase not configured
+            customProducts = JSON.parse(localStorage.getItem('customProducts')) || [];
+            updateDisplay();
+            return;
+        }
+
+        db.collection("products").orderBy("id", "desc")
+            .onSnapshot((querySnapshot) => {
+                customProducts = [];
+                querySnapshot.forEach((doc) => {
+                    customProducts.push(doc.data());
+                });
+                updateDisplay();
+            });
+    }
+
+    function updateDisplay() {
+        // Clear current custom from array to avoid duplicates
+        const baseProductsCount = 24 + 72; // Initial products + gallery
+        const baseProducts = products.slice(0, baseProductsCount);
+
+        // Resulting list
+        const finalProducts = [...baseProducts, ...customProducts];
+
+        // Re-render
+        renderProductsByCategory(finalProducts);
+        renderAdminProducts();
+    }
+
+    syncProducts();
+
+    loginBtn.addEventListener('click', () => {
+        if (adminPasswordInput.value === CORRECT_PASSWORD) {
+            adminModal.classList.remove('active');
+            adminSection.style.display = 'block';
+            adminPanelBox.style.display = 'block';
+            adminSection.scrollIntoView({ behavior: 'smooth' });
+            renderAdminProducts();
+        } else {
+            alert('كلمة السر خاطئة');
+        }
+    });
+
+    if (addProductForm) {
+        addProductForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Submit started...");
+
+            try {
+                const name = document.getElementById('p-name').value;
+                const price = document.getElementById('p-price').value;
+                const category = document.getElementById('p-category').value;
+                const specs = document.getElementById('p-specs').value;
+                const fileInput = document.getElementById('p-image-file');
+
+                if (!fileInput.files || !fileInput.files[0]) {
+                    alert('يرجى اختيار صورة للمنتج');
+                    return;
+                }
+
+                // Increase limit to 2MB and explain it's still restricted by database limits
+                if (fileInput.files[0].size > 500 * 1024 * 1024) {
+                    alert('حجم الصورة كبير جداً، يرجى اختيار صورة أصغر من 2 ميجابايت لضمان سرعة التحميل');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = async function (event) {
+                    const imageData = event.target.result;
+
+                    const newProduct = {
+                        id: Date.now(),
+                        name: name,
+                        price: price,
+                        category: category,
+                        specs: specs,
+                        image: imageData,
+                        isCustom: true
+                    };
+
+                    console.log("Attempting to save product:", newProduct.name);
+
+                    if (db) {
+                        try {
+                            await db.collection("products").add(newProduct);
+                            console.log("Firebase sync successful");
+                        } catch (error) {
+                            console.error("Firebase Error:", error);
+                            alert("خطأ في Firebase: " + error.message + ". سيتم الحفظ محلياً.");
+                            saveLocally(newProduct);
+                        }
+                    } else {
+                        console.log("Saving locally (no DB context)");
+                        saveLocally(newProduct);
+                    }
+
+                    addProductForm.reset();
+                    const fileLabel = document.querySelector('.file-label span');
+                    if (fileLabel) fileLabel.textContent = 'اضافة صوره';
+                    alert('تم إضافة المنتج بنجاح!');
+                };
+
+                reader.onerror = function () {
+                    alert("خطأ في قراءة ملف الصورة");
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+            } catch (err) {
+                console.error("General form error:", err);
+                alert("حدث خطأ غير متوقع: " + err.message);
+            }
+        });
+
+        const fileInput = document.getElementById('p-image-file');
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    document.querySelector('.file-label span').textContent = e.target.files[0].name;
+                }
+            });
+        }
+    }
+
+    function saveLocally(product) {
+        customProducts.push(product);
+        localStorage.setItem('customProducts', JSON.stringify(customProducts));
+        updateDisplay();
+    }
+
+    function renderAdminProducts() {
+        if (!adminProductsList) return;
+        adminProductsList.innerHTML = customProducts.map(p => `
+            <div class="admin-product-item">
+                <img src="${p.image}" alt="">
+                <h4>${p.name}</h4>
+                <button class="delete-btn" onclick="deleteProduct(${p.id})">حذف</button>
+            </div>
+        `).join('');
+    }
+
+    window.deleteProduct = async function (id) {
+        if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+            if (db) {
+                const snapshot = await db.collection("products").where("id", "==", id).get();
+                snapshot.forEach(doc => doc.ref.delete());
+            } else {
+                customProducts = customProducts.filter(p => p.id !== id);
+                localStorage.setItem('customProducts', JSON.stringify(customProducts));
+                updateDisplay();
+            }
+        }
+    };
 });
