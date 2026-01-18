@@ -198,6 +198,7 @@ const categoryMap = {
     'mics': 'cat-mics',
     'speakers': 'cat-speakers',
     'mixers': 'cat-mixers',
+    'accessories': 'cat-accessories',
     'installations': 'installations'
 };
 
@@ -304,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'mixers': 'الميكسرات والباور',
             'mics': 'الميكروفونات وأنظمة الصوت',
             'speakers': 'السماعات والساوند سيستم',
+            'accessories': 'إكسسوارات وأنظمة متنوعة',
             'installations': 'تجهيزاتنا على أرض الواقع'
         };
 
@@ -532,8 +534,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Firebase if config is provided
     let db = null;
     if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log("✅ Firebase Initialized successfully");
+        } catch (error) {
+            console.error("❌ Firebase Initialization Error:", error);
+        }
+    } else {
+        console.warn("⚠️ Firebase API Key not set. Using local storage.");
     }
 
     const adminTrigger = document.getElementById('admin-trigger');
@@ -624,9 +633,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Increase limit to 2MB and explain it's still restricted by database limits
-                if (fileInput.files[0].size > 500 * 1024 * 1024) {
-                    alert('حجم الصورة كبير جداً، يرجى اختيار صورة أصغر من 2 ميجابايت لضمان سرعة التحميل');
+                // Increase limit to 700KB because Firestore has a 1MB document limit and Base64 encoding adds overhead
+                if (fileInput.files[0].size > 700 * 1024) {
+                    alert('حجم الصورة كبير، يرجى اختيار صورة أصغر من 700 كيلوبايت لضمان المزامنة مع الجميع');
                     return;
                 }
 
