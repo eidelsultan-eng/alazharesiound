@@ -522,13 +522,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Firebase Configuration (Put your keys here)
     const firebaseConfig = {
-        apiKey: "AIzaSyBnaCO886pZQWvmFS8DKrqC1jqDrdT9_CM",
-        authDomain: "siond-a6c34.firebaseapp.com",
-        projectId: "siond-a6c34",
-        storageBucket: "siond-a6c34.firebasestorage.app",
-        messagingSenderId: "875547108455",
-        appId: "1:875547108455:web:d1b196683dc24b969be0c2",
-        measurementId: "G-CQZJ025G11"
+        apiKey: "AIzaSyCFjTjcoC4XNDBfa7zfS38qISVOg3Zy7Ls",
+        authDomain: "kkkkkkk-3185c.firebaseapp.com",
+        projectId: "kkkkkkk-3185c",
+        storageBucket: "kkkkkkk-3185c.firebasestorage.app",
+        messagingSenderId: "483380085587",
+        appId: "1:483380085587:web:f8542973f8b083d73d17a6",
+        measurementId: "G-SERTKBRZSY"
     };
 
     // Initialize Firebase if config is provided
